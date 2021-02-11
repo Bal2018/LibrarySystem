@@ -1,0 +1,15 @@
+#Files to be ignored
+.DS_Store
+.idea
+vendor
+node_modules
+
+src/Application
+src/Domain
+src/Infrastructure
+public
+app
+assets
+public
+templates
+
