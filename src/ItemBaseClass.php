@@ -6,25 +6,24 @@ namespace App;
 
 class ItemBaseClass
 {
-    protected $ISBN;
-    protected $bookName;
-//    protected $authorSurname;
-//    protected $authorFirstname;
+    protected int $ISBN;
+    protected string $title;
     /**
      * ItemBaseClass constructor.
      * @param $ISBN
-     * @param $bookName
-//     * @param $authorSurname
-//     * @param $authorFirstname
+     * @param $title
      */
-    public function __construct($ISBN,
-                                $bookName,
-// $authorFirstname, $authorSurname
-    ){
-        $this ->ISBN =  $ISBN;
-        $this->bookName = $bookName;
-//        $this->authorFirstname = $authorFirstname;
-//        $this->authorSurname = $authorSurname;
+    public function __construct(int $ISBN,  string $title)
+    {
+        $this->ISBN = $ISBN;
+        $this->title = $title;
     }
-
+    public function getISBN():int
+    {
+        return $this->ISBN;
+    }
+    public function getTitle():string
+    {
+        return $this->title;
+    }
 }

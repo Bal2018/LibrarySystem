@@ -4,11 +4,7 @@ namespace App;
 
 interface ItemInterface
 {
-    public function enterISBN();
+    public function getISBN():int;
 
-    public function enterTitle();
-
-    public function enterAuthorDetails();
-
-    public function enterSynopsis();
+    public function getTitle():string;
 }
