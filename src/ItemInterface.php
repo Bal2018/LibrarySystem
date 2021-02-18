@@ -4,7 +4,7 @@ namespace App;
 
 interface ItemInterface
 {
-    public function getISBN():int;
+    public function getISBNNumber():int;
 
     public function getTitle():string;
 }

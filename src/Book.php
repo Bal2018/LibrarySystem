@@ -5,7 +5,6 @@ namespace App;
 class Book extends ItemBaseClass implements ItemInterface
 {
 
-
     public function enterSynopsis()
     {
         // TODO: Implement enterSynopsis() method.
