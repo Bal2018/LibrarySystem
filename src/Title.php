@@ -14,7 +14,7 @@ class Title
     {
         if ((strlen($title) > 0) || strlen(trim($title) == 0)){
 
-         throw new \InvalidArgumentException("ERROR title must not be empty ");
+         throw new \InvalidArgumentException("ERROR : title must not be empty ");
         }
 
         $this->title = $title;
