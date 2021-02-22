@@ -48,7 +48,7 @@ class BookTest extends TestCase
      */
     public function testThrowsCorrectErrorTypeWhenISBNCreated($wrongISBNNumber,$expectedErrorType )
     {
-        $this->expectException(exception: $expectedErrorType);
+        $this->expectException($expectedErrorType);
         $wrongNumber = new ISBN($wrongISBNNumber);  //format is 12 , needs to be 13 digits long
         $this->sut = new Book($wrongNumber, $this->title);
         $this->sut->getISBNNumber();
@@ -82,19 +82,25 @@ class BookTest extends TestCase
     {
         return [
             "firstMessage" => [$WrongISBNNumber = 12467890123,
-                $expectedErrorType = "ERROR : Incorrect ISBN Format - must be 13 digits long"],
+                $expectedErrorType = "ERROR : Incorrect ISBN Format for [12467890123] - must be 13 digits long"],
             "secondMessage" => [$WrongISBNNumber = 12467-890123,
-                $expectedErrorMessage = "ERROR : ISBN must be a integer"],
+                $expectedErrorMessage = "ERROR : Incorrect ISBN Format - must be integer"],
             "thirdMessage" => [$WrongISBNNumber = 0000000000000,
-                $expectedErrorType = "ERROR : Incorrect ISBN Value - must not be zeros"]
+                $expectedErrorType = "ERROR : Incorrect ISBN Format for [0] - must not be just zeros"]
         ];
     }
     public function testIncorrectISBNLengthThrowsErrorMessage()
     {
-        $this->expectExceptionMessage("ERROR : Incorrect ISBN Format - must be 13 digits long");
+        $this->expectExceptionMessage("ERROR : Incorrect ISBN Format for - must be 13 digits long");
         $wrongNumber = new ISBN(24567890123);
         $this->sut = new Book($wrongNumber, $this->title);
         $this->sut->getISBNNumber();
+    }
+
+    public function testValidISBN()
+    {
+        $correctISBN = 9781857028898;
+        $this->assertTrue($this->ISBN->checkValidISBN($correctISBN),"Invalid ISBN Number");
     }
 
 //    public function testNumericISBN(): void
@@ -102,12 +108,6 @@ class BookTest extends TestCase
 //        $this->sut = new Book($this->ISBN, $this->title);
 //        $this->assertSame( 1234567890123, $this->sut->getISBNNumber());
 //    }
-
-    public function testValidISBN()
-    {
-        $correctISBN = 9781857028898;
-        $this->assertTrue($this->ISBN->checkValidISBN($correctISBN),"Invalid ISBN Number");
-    }
 
 //    public function testISBNNotZero()
 //    {

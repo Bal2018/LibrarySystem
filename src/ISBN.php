@@ -13,17 +13,19 @@ class ISBN
      * ISBN constructor.
      * @param $ISBNNumber
      * @throws \App\IncorrectISBNFormat
+     * @throws \App\IncorrectISBNZeros
      */
     public function __construct($ISBNNumber)
     {
         if (!ctype_digit(strval($ISBNNumber))){
-            throw new \InvalidArgumentException("ERROR : ISBN must be a integer");
+            throw new \InvalidArgumentException("ERROR : Incorrect ISBN Format - must be integer");
         }
         if (intval($ISBNNumber) == 0 ) {
-            throw new IncorrectISBNZeros("ERROR : Incorrect ISBN Value - must not be zeros");
+            throw IncorrectISBNZeros::withISBNZeros($ISBNNumber);
+
         }
         if (strlen(strval($ISBNNumber)) !== 13 ) {
-            throw new IncorrectISBNFormat("ERROR : Incorrect ISBN Format - must be 13 digits long");
+            throw IncorrectISBNFormat::withISBNFormat($ISBNNumber);
         }
         $this->ISBNNumber= $ISBNNumber;
     }
