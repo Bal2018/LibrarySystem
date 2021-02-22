@@ -1,9 +1,11 @@
 <?php
 
+
 namespace App;
 
 
-class IncorrectISBNType extends \Exception
+class IncorrectISBNZeros extends \Exception
 {
+
     protected $message = "OOOOPSSSS!";
 }

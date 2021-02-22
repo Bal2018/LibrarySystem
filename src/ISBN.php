@@ -2,8 +2,9 @@
 
 namespace App;
 
-use phpDocumentor\Reflection\Types\Boolean;
 use App\IncorrectISBNFormat;
+use App\IncorrectISBNZeros;
+
 class ISBN
 {
     protected int $ISBNNumber;
@@ -15,9 +16,11 @@ class ISBN
      */
     public function __construct($ISBNNumber)
     {
-        if (!is_numeric($ISBNNumber)){
-            echo "ERRRRROOOORR Not numeric -- all of it ";
-         throw new \InvalidArgumentException("ERROR : ISBN must be a integer");
+        if (!ctype_digit(strval($ISBNNumber))){
+            throw new \InvalidArgumentException("ERROR : ISBN must be a integer");
+        }
+        if (intval($ISBNNumber) == 0 ) {
+            throw new IncorrectISBNZeros("ERROR : Incorrect ISBN Value - must not be zeros");
         }
         if (strlen(strval($ISBNNumber)) !== 13 ) {
             throw new IncorrectISBNFormat("ERROR : Incorrect ISBN Format - must be 13 digits long");
