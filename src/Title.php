@@ -16,6 +16,7 @@ class Title
      * @throws EmptyTitle
      * @throws \App\ExtraLongTitle
      * @throws \App\ExtraTagsInTitle
+     * @throws \App\OnlyWhiteSpaceInTitle
      */
     public function __construct($title)
     {
@@ -28,6 +29,9 @@ class Title
         }
         if (strlen($title) > 180){
             throw ExtraLongTitle::withLongTitle($title);
+        }
+        if (ctype_space($title)) {
+            throw OnlyWhiteSpaceInTitle::withWhiteSpaces();
         }
         $this->title = $title;
     }

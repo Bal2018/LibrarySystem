@@ -26,7 +26,7 @@ class BookTest extends TestCase
 
     public function testFailsWhenUserEntersEmptyTitle()
     {
-        new Title("Hello <b>world!</b>");
+        new Title("");
 //        $this->sut = new Book($this->ISBN, $this->title);
 //        $this->assertSame( $emptyTitle, $this->sut->getTitle());
         // this could be checked by
@@ -35,12 +35,16 @@ class BookTest extends TestCase
     }
     public function testFailsWhenUserEntersExtraHTMLTagsInTitle()
     {
-        new Title("");
+        new Title("Hello <b>world!</b>");
 //        $this->sut = new Book($this->ISBN, $this->title);
 //        $this->asertSame( $emptyTitle, $this->sut->getTitle());
         // this could be checked by
         //       $this->assertEmpty($emptyTitle, "Title is empty");
 
+    }
+    public function testTitleIsNotJustSpaces()
+    {
+        new Title("                             ");
     }
 
     /**
