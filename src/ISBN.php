@@ -45,7 +45,5 @@ class ISBN
     public function checkValidISBN($ISBNNumber): bool
     {
        return array_sum(str_split($ISBNNumber)) % 10 == 0;
-
-
     }
 }

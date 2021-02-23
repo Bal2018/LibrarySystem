@@ -2,21 +2,33 @@
 
 namespace App;
 
+use App\EmptyTitle;
+use App\ExtraLongTitle;
+use App\ExtraTagsInTitle;
+
 class Title
 {
-    private string $title;
+    protected string $title;
 
     /**
      * Title constructor.
      * @param $title
+     * @throws EmptyTitle
+     * @throws \App\ExtraLongTitle
+     * @throws \App\ExtraTagsInTitle
      */
     public function __construct($title)
     {
-        if ((strlen($title) > 0) || strlen(trim($title) == 0)){
-
-         throw new \InvalidArgumentException("ERROR : Title must not be empty ");
+        if (empty($title)) {
+            throw EmptyTitle::titleIsEmpty();
         }
-
+        if ($title != strip_tags($title))
+        {
+            throw ExtraTagsInTitle::withExtraTags($title);
+        }
+        if (strlen($title) > 180){
+            throw ExtraLongTitle::withLongTitle($title);
+        }
         $this->title = $title;
     }
 
