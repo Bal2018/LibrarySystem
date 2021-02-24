@@ -8,6 +8,8 @@ use App\IncorrectISBNZeros;
 class ISBN
 {
     protected int $ISBNNumber;
+    protected array $AllBooks =['1234567890123', '2345678901234', '0987654321234', '8765432123456'];
+
 
     /**
      * ISBN constructor.
@@ -45,5 +47,16 @@ class ISBN
     public function checkValidISBN($ISBNNumber): bool
     {
        return array_sum(str_split($ISBNNumber)) % 10 == 0;
+    }
+
+    /**
+     * @param $ISBNNumber
+     * @return bool
+     */
+    public function getBookUsingISBN($NNumber): bool
+    {
+      print_r($NNumber);
+        echo "\n <> ";
+        return (in_array($NNumber, $this->AllBooks));
     }
 }

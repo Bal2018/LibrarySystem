@@ -177,5 +177,10 @@ class BookTest extends TestCase
 //        <<check that number is not zeros
 //    }
 
+    public function testToCheckIfBookExistsUsingISBN()
+    {
+        $ISBNToSearch = 1234567890123;
+        $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
+    }
 
 }
