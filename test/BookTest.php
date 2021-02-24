@@ -159,9 +159,15 @@ class BookTest extends TestCase
         $this->sut->getISBNNumber();
     }
 
-    public function testValidISBN()
+    /**
+     * @dataProvider dataProviderBookDetails
+     *
+     * Test : to check the correct error message is returned from ISBN construct function depending upon what is stored in the data module
+     * @param $ISBN
+     */
+    public function testValidISBN($ISBN)
     {
-        $correctISBN = 9781857028898;
+        $correctISBN = $ISBN;
         $this->assertTrue($this->ISBN->checkValidISBN($correctISBN),"Invalid ISBN Number");
     }
 
@@ -179,8 +185,27 @@ class BookTest extends TestCase
 
     public function testToCheckIfBookExistsUsingISBN()
     {
-        $ISBNToSearch = 1234567890123;
-        $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
+        $ISBNToSearch = 9780199535569;
+         $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
     }
 
+//    public function testToGetBookDetailsUsingISBN()
+//    {
+//        $ISBNToSearch = 9781479182617;
+//        $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
+//
+//    }
+
+
+    public function dataProviderBookDetails()
+    {
+        return [
+            "firstBook"     => ["ISBN"=>9780199535569, "title"=>"Pride and Prejudice"],
+            "secondBook"    => ["ISBN"=>9781526603180, "title"=>"Space Detectives"],
+            "thirdBook"     => ["ISBN"=>9781471182617, "title"=>"The Littlest Yak"],
+            "fourthBook"    => ["ISBN"=>9780670913503, "title"=>"Hairy Maclary from Donaldson's Dairy - Hairy Maclary and Friends"],
+            "fifthBook"     => ["ISBN"=>9781509804788, "title"=>"A Squash and a Squeeze"],
+            "invalidBook1"  => ["ISBN"=>9781509804781, "title"=>"An invalid book title"],
+        ];
+    }
 }

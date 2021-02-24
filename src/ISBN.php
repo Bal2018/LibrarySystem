@@ -2,14 +2,27 @@
 
 namespace App;
 
-use App\IncorrectISBNFormat;
-use App\IncorrectISBNZeros;
 
 class ISBN
 {
     protected int $ISBNNumber;
-    protected array $AllBooks =['1234567890123', '2345678901234', '0987654321234', '8765432123456'];
-
+    protected array $AllBooks =[
+        array (
+            "ISBN" => 9780199535569,
+            "title" =>"Pride and Prejudice"),
+        array (
+            "ISBN"=>9781526603180,
+            "title"=>"Space Detectives"),
+        array (
+            "ISBN"=>9781471182617 ,
+            "title"=>"The Littlest Yak"),
+        array (
+            "ISBN" =>9780670913503,
+            "title"=>"Hairy Maclary from Donaldson's Dairy - Hairy Maclary and Friends"),
+        array (
+            "ISBN" =>9781509804788 ,
+            "title"=>"A Squash and a Squeeze")
+        ];
 
     /**
      * ISBN constructor.
@@ -46,7 +59,22 @@ class ISBN
      */
     public function checkValidISBN($ISBNNumber): bool
     {
-       return array_sum(str_split($ISBNNumber)) % 10 == 0;
+        $ISBNLength = strlen($ISBNNumber);
+        if ($ISBNLength < 12 or $ISBNLength > 13) {
+            throw new Exception('Invalid ISBN-13 format.');
+        }
+
+        //Calculate check digit
+        $checkdigit = 0;
+        for ($i = 0; $i < 12; $i += 2) {
+            $checkdigit += 1 * substr($ISBNNumber, $i, 1);
+            $checkdigit += 3 * substr($ISBNNumber, $i+1, 1);
+        }
+
+        $checkdigit = 10 - $checkdigit % 10;
+        return ($checkdigit == substr($ISBNNumber,-1));
+
+      // return array_sum(str_split($ISBNNumber)) % 10 == 0;
     }
 
     /**
@@ -55,8 +83,7 @@ class ISBN
      */
     public function getBookUsingISBN($NNumber): bool
     {
-      print_r($NNumber);
-        echo "\n <> ";
-        return (in_array($NNumber, $this->AllBooks));
+       return (in_array($NNumber, array_column($this->AllBooks,'ISBN')));
+  //      return (in_array($NNumber, $this->AllBooks));
     }
 }
