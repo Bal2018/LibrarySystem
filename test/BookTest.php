@@ -183,9 +183,15 @@ class BookTest extends TestCase
 //        <<check that number is not zeros
 //    }
 
-    public function testToCheckIfBookExistsUsingISBN()
+    /**
+     * @dataProvider dataProviderBookDetails
+     *
+     * Test : to check the correct error message is returned from ISBN construct function depending upon what is stored in the data module
+     * @param $ISBN
+     */
+    public function testToCheckIfBookExistsUsingISBN($ISBN)
     {
-        $ISBNToSearch = 9780199535569;
+        $ISBNToSearch = $ISBN;
          $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
     }
 
@@ -205,7 +211,7 @@ class BookTest extends TestCase
             "thirdBook"     => ["ISBN"=>9781471182617, "title"=>"The Littlest Yak"],
             "fourthBook"    => ["ISBN"=>9780670913503, "title"=>"Hairy Maclary from Donaldson's Dairy - Hairy Maclary and Friends"],
             "fifthBook"     => ["ISBN"=>9781509804788, "title"=>"A Squash and a Squeeze"],
-            "invalidBook1"  => ["ISBN"=>9781509804781, "title"=>"An invalid book title"],
+            "invalidBook1"  => ["ISBN"=>9781309804781, "title"=>"An invalid book title"],
         ];
     }
 }

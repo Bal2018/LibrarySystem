@@ -71,7 +71,10 @@ class ISBN
             $checkdigit += 3 * substr($ISBNNumber, $i+1, 1);
         }
 
-        $checkdigit = 10 - $checkdigit % 10;
+        $checkdigit =  $checkdigit % 10;
+        if ($checkdigit != 0){
+            $checkdigit = 10 - $checkdigit;
+        }
         return ($checkdigit == substr($ISBNNumber,-1));
 
       // return array_sum(str_split($ISBNNumber)) % 10 == 0;
