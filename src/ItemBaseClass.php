@@ -65,7 +65,7 @@ class ItemBaseClass
      * @return bool
      * @throws Exception
      */
-    public static function checkValidISBN($ISBNNumber): bool
+    public static function checkValidISBN(int $ISBNNumber): bool
     {
         $ISBNLength = strlen(strval($ISBNNumber));
         if ($ISBNLength < 12 or $ISBNLength > 13) {

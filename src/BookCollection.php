@@ -17,7 +17,7 @@ class BookCollection
     }
 
     /**
-     * @param $ISBNNumber
+     * @param int $ISBNNumber
      * @return bool
      */
     public function getBookUsingISBN($ISBNNumber): bool

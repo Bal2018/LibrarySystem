@@ -4,18 +4,20 @@ namespace App;
 
 class Book extends ItemBaseClass implements ItemInterface
 {
-    public function enterSynopsis()
+    public function enterSynopsis() : string
     {
         // TODO: Implement enterSynopsis() method.
+        return ("SYNOPSIS ENTERED ");
     }
 
-    public function enterAuthorDetails()
+    public function enterAuthorDetails() :string
     {
         // TODO: Implement enterAuthorDetails() method.
 
-        return ("Yup");
+        return ("AuthorDetails");
     }
-    public function enterCoverType()
+    public function enterCoverType() : bool
     {
+        return true;
     }
 }
