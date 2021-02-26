@@ -1,8 +1,8 @@
 <?php
 
 use App\IncorrectISBNZeros;
-use App\ISBN;
-use App\Title;
+//use App\ISBN;
+//use App\Title;
 use PHPUnit\Framework\TestCase;
 
 use App\Book;
@@ -13,11 +13,15 @@ class BookCollectionTest extends TestCase
 {
     private Book $sut;
     private string $title;
+    private  int $ISBN;
+    private \App\BookCollection $library;
+    private \App\ItemBaseClass $base;
+
 
     protected function setUp(): void
     {
         try {
-            $this->ISBN = new ISBN(1234567890123);
+             $this->ISBN   = 1234567890123;
         } catch (IncorrectISBNFormat $e) {
         }
         $this->title = "A Sunny Morning";
@@ -25,18 +29,18 @@ class BookCollectionTest extends TestCase
 
     public function testFailsWhenUserEntersEmptyTitle()
     {
-        new Title("");
+        $this->title = "";
     }
     public function testFailsWhenUserEntersExtraHTMLTagsInTitle()
     {
-        new Title("Hello <b>world!</b>");
+        $this->title = "Hello <b>world!</b>";
         // this could be checked by
         //       $this->assertEmpty($emptyTitle, "Title is empty");
 
     }
     public function testTitleIsNotJustSpaces()
     {
-        new Title("                             ");
+        $this->title = ("                             ");
     }
 
     /**
@@ -45,7 +49,7 @@ class BookCollectionTest extends TestCase
      */
     public function testFailsWhenUserEntersATitleLongerThan200Chars($incorrectTitle )
     {
-        new Title($incorrectTitle);
+        $this->title =($incorrectTitle);
 //        $this->sut = new Book($this->ISBN, $this->title);
 //        $this->assertSame( $emptyTitle, $this->sut->getTitle());
         // this could be checked by
@@ -71,8 +75,8 @@ class BookCollectionTest extends TestCase
     public function testThrowsCorrectErrorTypeWhenTitleIsCreated($incorrectTitle, $expectedErrorType)
     {
         $this->expectException($expectedErrorType);
-        $wrongNumber = new Title($incorrectTitle);  //format is 12 , needs to be 13 digits long
-        $this->sut = new Book($this->ISBN, $wrongNumber);
+
+        $this->sut = new Book($this->ISBN, $incorrectTitle);  // title must be 13 digits long;
 
     }
 
@@ -107,8 +111,8 @@ class BookCollectionTest extends TestCase
     public function testThrowsCorrectErrorTypeWhenISBNCreated($wrongISBNNumber,$expectedErrorType )
     {
         $this->expectException($expectedErrorType);
-        $wrongNumber = new ISBN($wrongISBNNumber);  //format is 12 , needs to be 13 digits long
-        $this->sut = new Book($wrongNumber, $this->title);
+
+        $this->sut = new Book($wrongISBNNumber, $this->title);
         $this->sut->getISBNNumber();
     }
 
@@ -135,8 +139,8 @@ class BookCollectionTest extends TestCase
     public function testIncorrectISBNCorrectErrorMessage($wrongISBNNumber,$expectedErrorMessage)
     {
         $this->expectExceptionMessage($expectedErrorMessage);
-        $wrongNumber = new ISBN($wrongISBNNumber);
-        $this->sut = new Book($wrongNumber, $this->title);
+
+        $this->sut = new Book($wrongISBNNumber, $this->title);
         $this->sut->getISBNNumber();
     }
 
@@ -157,7 +161,7 @@ class BookCollectionTest extends TestCase
     public function testIncorrectISBNLengthThrowsErrorMessage()
     {
         $this->expectExceptionMessage("ERROR : Incorrect ISBN Format for - must be 13 digits long");
-        $wrongNumber = new ISBN(24567890123);
+        $wrongNumber =  24567890123 ;
         $this->sut = new Book($wrongNumber, $this->title);
         $this->sut->getISBNNumber();
     }
@@ -168,11 +172,13 @@ class BookCollectionTest extends TestCase
      * Test : to check the correct error message is returned from ISBN construct function depending upon what is stored in the data module
      * @param $ISBN
      */
-    public function testValidISBN($ISBN)
-    {
-        $correctISBN = $ISBN;
-        $this->assertTrue($this->ISBN->checkValidISBN($correctISBN),"Invalid ISBN Number");
-    }
+//    public function testValidISBN($ISBN)
+//    {
+//        $correctISBN = $ISBN;
+//        $this->assertTrue($this->base->);
+//        $this->assertTrue($this->\App\ItemBaseClass::checkValidISBN($correctISBN),"Invalid ISBN Number");
+// //           checkValidISBN($correctISBN),"Invalid ISBN Number");
+//    }
 
 //    public function testNumericISBN(): void
 //    {

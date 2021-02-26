@@ -1,8 +1,8 @@
 <?php
 
 use App\IncorrectISBNZeros;
-use App\ISBN;
-use App\Title;
+//use App\ISBN;
+//use App\Title;
 use PHPUnit\Framework\TestCase;
 
 use App\Book;
@@ -12,7 +12,7 @@ use App\IncorrectISBNFormat;
 class BookTest extends TestCase
 {
     private string $title;
-    private  int $ISBN;
+    private int $ISBN;
     private \App\BookCollection $library;
 
     protected function setUp(): void
@@ -56,9 +56,7 @@ class BookTest extends TestCase
     {
             $this->expectExceptionMessage('ERROR : Extra long title entered - Title must be < 180 chars');
             $book = new Book($this->ISBN,$incorrectTitle);
-
     }
-
 
     public function dataProviderForExtraLongTitles()
     {
@@ -68,7 +66,7 @@ class BookTest extends TestCase
             "thirdTitle" => [$incorrectTitle = "Alphabet Juice: The Energies, Gists, and Spirits of Letters, Words, and Combinations Thereof; Their Roots, Bones, Innards, Piths, Pips, and Secret Parts, Tinctures, Tonics, and Essences; With Examples of Their Usage Foul and Savory"],  //232 chars"]
        	    "fourthTitle" =>[$incorrectTitle = "Cross Country: Fifteen Years and Ninety Thousand Miles on the Roads and Interstates of America Lewis and Clark, a Lot of Bad Motels, a Moving Van, Emily Post, Jack Kerouac,My Wife, My Mother-In-Law, Two Kids and Enough Coffee to Kill an Elephant"] //246 chars
         ];
-            }
+    }
 
     /**
      * @dataProvider dataProviderForTitleErrorType
