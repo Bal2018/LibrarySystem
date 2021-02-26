@@ -51,8 +51,8 @@
     },
     "scripts": {
         "start": "php -S localhost:8080 -t public",
-        "test": "./vendor/bin/phpunit",
-        "check-styles": ".vendor/bin/php-cs-fixer fix --dry-run src --diff",
+        "test": "vendor/bin/phpunit",
+        "check-styles": "vendor/bin/php-cs-fixer fix --dry-run src --diff",
         "fix-styles": "vendor/bin/php-cs-fixer fix src"
     }
 }

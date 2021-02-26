@@ -1,8 +1,13 @@
 <?php
 
+use App\BookCollection;
+use App\EmptyTitle;
+use App\ExtraLongTitle;
+use App\ExtraTagsInTitle;
 use App\IncorrectISBNZeros;
 //use App\ISBN;
 //use App\Title;
+use App\OnlyWhiteSpaceInTitle;
 use PHPUnit\Framework\TestCase;
 
 use App\Book;
@@ -13,33 +18,29 @@ class BookTest extends TestCase
 {
     private string $title;
     private int $ISBN;
-    private \App\BookCollection $library;
+    private BookCollection $library;
 
     protected function setUp(): void
     {
-        $this->ISBN =  1234567890123;
-        $this->title = "A Sunny Morning";
-
-        $this->library = new \App\BookCollection();
+        $this->ISBN =  9781509804788;
+        $this->title = "A Squash and a Squeeze";
+        $this->library = new BookCollection();
     }
 
     public function testFailsWhenUserEntersEmptyTitle()
     {
         $this->expectExceptionMessage('Incorrect Title - must not be empty');
         $book = new Book($this->ISBN,"");
-
     }
 
     public function testFailsWhenUserEntersExtraHTMLTagsInTitle()
     {
         $this->expectExceptionMessage('ERROR : Extra information entered with title - [Hello <b>world!</b>]');
         $book = new Book($this->ISBN,"Hello <b>world!</b>");
-
     }
 
     public function testTitleIsNotJustSpaces()
     {
-
         $this->expectExceptionMessage('ERROR : Title must not be just spaces');
         $book = new Book($this->ISBN,"           ");
     }
@@ -47,10 +48,10 @@ class BookTest extends TestCase
     /**
      * @dataProvider dataProviderForExtraLongTitles
      * @param $incorrectTitle
-     * @throws \App\EmptyTitle
-     * @throws \App\ExtraLongTitle
-     * @throws \App\ExtraTagsInTitle
-     * @throws \App\OnlyWhiteSpaceInTitle
+     * @throws EmptyTitle
+     * @throws ExtraLongTitle
+     * @throws ExtraTagsInTitle
+     * @throws OnlyWhiteSpaceInTitle
      */
     public function testFailsWhenUserEntersATitleLongerThan200Chars($incorrectTitle )
     {
@@ -76,10 +77,10 @@ class BookTest extends TestCase
      * @param $expectedErrorType
      * @throws IncorrectISBNFormat
      * @throws IncorrectISBNZeros
-     * @throws \App\EmptyTitle
-     * @throws \App\ExtraLongTitle
-     * @throws \App\ExtraTagsInTitle
-     * @throws \App\OnlyWhiteSpaceInTitle
+     * @throws EmptyTitle
+     * @throws ExtraLongTitle
+     * @throws ExtraTagsInTitle
+     * @throws OnlyWhiteSpaceInTitle
      */
     public function testThrowsCorrectErrorTypeWhenTitleIsCreated($incorrectTitle, $expectedErrorType)
     {
@@ -91,13 +92,13 @@ class BookTest extends TestCase
     {
         return [
             "firstType" => [$incorrectTitle = "",
-                $expectedErrorType = \App\EmptyTitle::class],
+                $expectedErrorType = EmptyTitle::class],
             "secondType" => [$incorrectTitle = "Hello <b>world!</b>",
-                    $expectedErrorType = \App\ExtraTagsInTitle::class],
+                    $expectedErrorType = ExtraTagsInTitle::class],
             "thirdType" => [$incorrectTitle = "<blink><strong>Hello!</strong></blink>",
-                    $expectedErrorType = \App\ExtraTagsInTitle::class],
+                    $expectedErrorType = ExtraTagsInTitle::class],
             "fourthType" => [$incorrectTitle = "Noisy Outlaws, Unfriendly Blobs, and Some Other Things That Aren't as Scary, Maybe, Depending on How You Feel About Lost Lands, Stray Cellphones, Creatures From the Sky, Parents Who Disappear in Peru, a Man Named Lars Farf, and One Other Story We [...]",
-                $expectedErrorType = \App\ExtraLongTitle::class] //255 chars
+                $expectedErrorType = ExtraLongTitle::class] //255 chars
         ];
     }
 
@@ -116,7 +117,6 @@ class BookTest extends TestCase
     {
         $this->expectException($expectedErrorType);
         $book = new Book($wrongISBNNumber, $this->title);
-
     }
 
     /**
