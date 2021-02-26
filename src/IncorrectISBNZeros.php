@@ -3,7 +3,6 @@
 
 namespace App;
 
-
 class IncorrectISBNZeros extends \Exception
 {
     public static function withISBNZeros($isbnNo) :  self

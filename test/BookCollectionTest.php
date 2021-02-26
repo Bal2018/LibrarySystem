@@ -9,62 +9,55 @@ use App\Book;
 use App\IncorrectISBNFormat;
 
 
-class BookTest extends TestCase
+class BookCollectionTest extends TestCase
 {
+    private Book $sut;
     private string $title;
-    private  int $ISBN;
-    private \App\BookCollection $library;
 
     protected function setUp(): void
     {
-        $this->ISBN =  1234567890123;
+        try {
+            $this->ISBN = new ISBN(1234567890123);
+        } catch (IncorrectISBNFormat $e) {
+        }
         $this->title = "A Sunny Morning";
-
-        $this->library = new \App\BookCollection();
     }
 
     public function testFailsWhenUserEntersEmptyTitle()
     {
-        $this->expectExceptionMessage('Incorrect Title - must not be empty');
-        $book = new Book($this->ISBN,"");
-
+        new Title("");
     }
-
     public function testFailsWhenUserEntersExtraHTMLTagsInTitle()
     {
-        $this->expectExceptionMessage('ERROR : Extra information entered with title - [Hello <b>world!</b>]');
-        $book = new Book($this->ISBN,"Hello <b>world!</b>");
+        new Title("Hello <b>world!</b>");
+        // this could be checked by
+        //       $this->assertEmpty($emptyTitle, "Title is empty");
 
     }
-
     public function testTitleIsNotJustSpaces()
     {
-
-        $this->expectExceptionMessage('ERROR : Title must not be just spaces');
-        $book = new Book($this->ISBN,"           ");
+        new Title("                             ");
     }
 
     /**
-     * @dataProvider dataProviderForExtraLongTitles
-     * @param $incorrectTitle
-     * @throws \App\EmptyTitle
-     * @throws \App\ExtraLongTitle
-     * @throws \App\ExtraTagsInTitle
-     * @throws \App\OnlyWhiteSpaceInTitle
+     *  @dataProvider dataProviderForExtraLongTitles
+     *
      */
     public function testFailsWhenUserEntersATitleLongerThan200Chars($incorrectTitle )
     {
-            $this->expectExceptionMessage('ERROR : Extra long title entered - Title must be < 180 chars');
-            $book = new Book($this->ISBN,$incorrectTitle);
+        new Title($incorrectTitle);
+//        $this->sut = new Book($this->ISBN, $this->title);
+//        $this->assertSame( $emptyTitle, $this->sut->getTitle());
+        // this could be checked by
+        //       $this->assertEmpty($emptyTitle, "Title is empty");
 
     }
-
 
     public function dataProviderForExtraLongTitles()
     {
         return [
-//            "firstTitle" => [$incorrectTitle = "Captain underpants and the invasion of the incredibly char=168...123"],
-//            "secondTitle" =>[$incorrectTitle = "Don't Get Too Comfortable: The Indignities of Coach Class, The Torments of Low Thread Count, The Never-Ending Quest for Artisanal Olive Oil, and Other First World Problems" ], //172 chars"
+            "firstTitle" => [$incorrectTitle = "Captain underpants and the invasion of the incredibly char=168...123"],
+            "secondTitle" =>[$incorrectTitle = "Don't Get Too Comfortable: The Indignities of Coach Class, The Torments of Low Thread Count, The Never-Ending Quest for Artisanal Olive Oil, and Other First World Problems" ], //172 chars"
             "thirdTitle" => [$incorrectTitle = "Alphabet Juice: The Energies, Gists, and Spirits of Letters, Words, and Combinations Thereof; Their Roots, Bones, Innards, Piths, Pips, and Secret Parts, Tinctures, Tonics, and Essences; With Examples of Their Usage Foul and Savory"],  //232 chars"]
        	    "fourthTitle" =>[$incorrectTitle = "Cross Country: Fifteen Years and Ninety Thousand Miles on the Roads and Interstates of America Lewis and Clark, a Lot of Bad Motels, a Moving Van, Emily Post, Jack Kerouac,My Wife, My Mother-In-Law, Two Kids and Enough Coffee to Kill an Elephant"] //246 chars
         ];
@@ -74,19 +67,13 @@ class BookTest extends TestCase
      * @dataProvider dataProviderForTitleErrorType
      *
      *
-     * @param $incorrectTitle
-     * @param $expectedErrorType
-     * @throws IncorrectISBNFormat
-     * @throws IncorrectISBNZeros
-     * @throws \App\EmptyTitle
-     * @throws \App\ExtraLongTitle
-     * @throws \App\ExtraTagsInTitle
-     * @throws \App\OnlyWhiteSpaceInTitle
-     */
+     * */
     public function testThrowsCorrectErrorTypeWhenTitleIsCreated($incorrectTitle, $expectedErrorType)
     {
         $this->expectException($expectedErrorType);
-        $book = new Book($this->ISBN, $incorrectTitle);
+        $wrongNumber = new Title($incorrectTitle);  //format is 12 , needs to be 13 digits long
+        $this->sut = new Book($this->ISBN, $wrongNumber);
+
     }
 
     public function dataProviderForTitleErrorType()
@@ -103,6 +90,9 @@ class BookTest extends TestCase
         ];
     }
 
+
+
+
 //        checking TYPE of exception thrown
 
     /**
@@ -114,13 +104,25 @@ class BookTest extends TestCase
      * @throws IncorrectISBNFormat
      * @throws IncorrectISBNZeros
      */
-    public function testThrowsCorrectErrorTypeWhenISBNCreated($wrongISBNNumber,$expectedErrorMessage,$expectedErrorType )
+    public function testThrowsCorrectErrorTypeWhenISBNCreated($wrongISBNNumber,$expectedErrorType )
     {
         $this->expectException($expectedErrorType);
-        $book = new Book($wrongISBNNumber, $this->title);
-
+        $wrongNumber = new ISBN($wrongISBNNumber);  //format is 12 , needs to be 13 digits long
+        $this->sut = new Book($wrongNumber, $this->title);
+        $this->sut->getISBNNumber();
     }
 
+//    public function dataProviderForErrorType()
+//    {
+//        return [
+//            "firstType" => [$WrongISBNNumber = 12467890123,
+//                $expectedErrorType = IncorrectISBNFormat::class],
+//            "secondType" => [$WrongISBNNumber = 12467-890123,
+//                $expectedErrorType = InvalidArgumentException::class],
+//            "thirdType" => [$WrongISBNNumber = 0000000000000,
+//                $expectedErrorType = IncorrectISBNZeros::class]
+//        ];
+//    }
     /**
      * @dataProvider dataProviderForErrorMessagesAndTypes
      *
@@ -133,14 +135,16 @@ class BookTest extends TestCase
     public function testIncorrectISBNCorrectErrorMessage($wrongISBNNumber,$expectedErrorMessage)
     {
         $this->expectExceptionMessage($expectedErrorMessage);
-        $book =  new Book($wrongISBNNumber, $this->title);
+        $wrongNumber = new ISBN($wrongISBNNumber);
+        $this->sut = new Book($wrongNumber, $this->title);
+        $this->sut->getISBNNumber();
     }
 
     public function dataProviderForErrorMessagesAndTypes()
     {
         return [
             "firstMessage" =>  [$WrongISBNNumber = 12467890123,
-                                $expectedErrorMessage = 'ERROR : Incorrect ISBN Format for [12467890123] - must be 13 digits long',
+                                $expectedErrorMessage = 'ERROR : Incorrect ISBN Format for 12467890123 - must be 13 digits long',
                                 $expectedErrorType = IncorrectISBNFormat::class],
             "secondMessage" => [$WrongISBNNumber = 12467-890123,
                                 $expectedErrorMessage = "ERROR : Incorrect ISBN Format - must be integer",
@@ -150,19 +154,12 @@ class BookTest extends TestCase
                                 $expectedErrorType = IncorrectISBNZeros::class]
         ];
     }
-
-
-    /**
-     * @dataProvider dataProviderBookDetails
-     *
-     * Test : to check the correct error message is returned from ISBN construct function depending upon what is stored in the data module
-     * @param $correctISBN
-     * @throws Exception
-     */
-    public function testValidISBN($correctISBN)
+    public function testIncorrectISBNLengthThrowsErrorMessage()
     {
-
-        $this->assertTrue(Book::checkValidISBN($correctISBN),"Invalid ISBN Number");
+        $this->expectExceptionMessage("ERROR : Incorrect ISBN Format for - must be 13 digits long");
+        $wrongNumber = new ISBN(24567890123);
+        $this->sut = new Book($wrongNumber, $this->title);
+        $this->sut->getISBNNumber();
     }
 
     /**
@@ -171,9 +168,34 @@ class BookTest extends TestCase
      * Test : to check the correct error message is returned from ISBN construct function depending upon what is stored in the data module
      * @param $ISBN
      */
-    public function testToCheckIfBookExistsUsingISBN($ISBNToSearch)
+    public function testValidISBN($ISBN)
     {
-        $this->assertTrue(($this->library->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
+        $correctISBN = $ISBN;
+        $this->assertTrue($this->ISBN->checkValidISBN($correctISBN),"Invalid ISBN Number");
+    }
+
+//    public function testNumericISBN(): void
+//    {
+//        $this->sut = new Book($this->ISBN, $this->title);
+//        $this->assertSame( 1234567890123, $this->sut->getISBNNumber());
+//    }
+
+//    public function testISBNNotZero()
+//    {
+//        $wrongNumber = new ISBN(0000000000000);
+//        <<check that number is not zeros
+//    }
+
+    /**
+     * @dataProvider dataProviderBookDetails
+     *
+     * Test : to check the correct error message is returned from ISBN construct function depending upon what is stored in the data module
+     * @param $ISBN
+     */
+    public function testToCheckIfBookExistsUsingISBN($ISBN)
+    {
+        $ISBNToSearch = $ISBN;
+        $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
     }
     /**
      * @dataProvider dataProviderBookDetails
@@ -181,13 +203,21 @@ class BookTest extends TestCase
      * Test : to check the correct error message is returned from ISBN construct function depending upon what is stored in the data module
      * @param $ISBN
      */
-    public function testReturnBookDetails($ISBNToSearch, $title )
+    public function testReturnBookDetails($ISBN, $title )
     {
-        $this->assertTrue(($this->library->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
-        $book = $this->library->getBookDetailsUsingISBN($ISBNToSearch);
-        $this->assertNotNull($book,"Book Doesn't exist");
-        $this->assertSame($title, $book->getTitle());
+        $titleReturned ='';
+        $ISBNToSearch = $ISBN;
+        $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
+        $titleReturned= $this->ISBN->getBookDetailsUsingISBN($ISBNToSearch);
+        echo ">".$titleReturned."<";
     }
+//    public function testToGetBookDetailsUsingISBN()
+//    {
+//        $ISBNToSearch = 9781479182617;
+//        $this->assertTrue(($this->ISBN->getBookUsingISBN($ISBNToSearch)),"Invalid ISBN Number n- Book not in library system");
+//
+//    }
+
 
     public function dataProviderBookDetails()
     {

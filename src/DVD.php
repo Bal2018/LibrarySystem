@@ -23,7 +23,7 @@ class DVD extends ItemBaseClass implements ItemInterface
 
         return ("Yup");
     }
-    public function enterCoverType(){
-
+    public function enterCoverType()
+    {
     }
 }

@@ -3,7 +3,6 @@
 
 namespace App;
 
-
 class EmptyTitle extends \Exception
 {
     public static function titleIsEmpty() : self

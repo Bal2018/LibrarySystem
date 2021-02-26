@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 class IncorrectISBNType extends \Exception
 {
     public static function withISBNType($isbnNo) :  self

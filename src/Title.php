@@ -23,11 +23,10 @@ class Title
         if (empty($title)) {
             throw EmptyTitle::titleIsEmpty();
         }
-        if ($title != strip_tags($title))
-        {
+        if ($title != strip_tags($title)) {
             throw ExtraTagsInTitle::withExtraTags($title);
         }
-        if (strlen($title) > 180){
+        if (strlen($title) > 180) {
             throw ExtraLongTitle::withLongTitle($title);
         }
         if (ctype_space($title)) {

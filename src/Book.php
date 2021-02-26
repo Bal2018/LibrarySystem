@@ -4,7 +4,6 @@ namespace App;
 
 class Book extends ItemBaseClass implements ItemInterface
 {
-
     public function enterSynopsis()
     {
         // TODO: Implement enterSynopsis() method.
@@ -16,7 +15,7 @@ class Book extends ItemBaseClass implements ItemInterface
 
         return ("Yup");
     }
-    public function enterCoverType(){
-
+    public function enterCoverType()
+    {
     }
 }
